@@ -11,3 +11,6 @@ class ApiResponse {
     }
 }
 
+export {
+    ApiResponse
+}
