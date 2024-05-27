@@ -130,7 +130,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     // 4. 
-    const isPasswordValid = await user.isPasswordCorrect(password)
+    const isPasswordValid = await user.comeparePassword(password)
 
     if (!isPasswordValid) {
         throw new ApiError(404, "Invalid user credentials")
@@ -169,8 +169,8 @@ const logoutUser = asyncHandler(async(req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1
             }
         },
         {
@@ -236,7 +236,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     const {oldPassword, newPassword} = req.body
 
     const user = await User.findById(req.user?._id)
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+    const isPasswordCorrect = await user.comeparePassword(oldPassword)
 
     if (!isPasswordCorrect) {
         throw new ApiError(400, "Invalid old password")
